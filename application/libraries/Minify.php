@@ -193,7 +193,7 @@ class Minify
 	 * @var array
 	 */
 	private $_lmod = array('css' => 0, 'js' => 0);
-
+	
 	/**
 	 * Constructor
 	 *
@@ -223,6 +223,7 @@ class Minify
 		$this->compress           = $this->ci->config->item('compress', 'minify') ?: $this->compress;
 		$this->compression_engine = $this->ci->config->item('compression_engine', 'minify') ?: $this->compression_engine;
 		$this->closurecompiler    = $this->ci->config->item('closurecompiler', 'minify') ?: $this->closurecompiler;
+
 
 		if (count($config) > 0)
 		{
@@ -648,7 +649,9 @@ class Minify
 
 		foreach ($files as $file)
 		{
-			$output[] = $this->html_tags ? sprintf($template, $this->_base_url($file)) : $this->_base_url($file);
+			$file_with_mtime = $file . '?' . filemtime($file);   // Edits to bybass htaccess Cache
+            		$output[] = $this->html_tags ? sprintf($template, base_url($file_with_mtime)) : base_url($file_with_mtime);
+			//$output[] = $this->html_tags ? sprintf($template, $this->_base_url($file)) : $this->_base_url($file);
 		}
 
 		if ( ! empty($output))
